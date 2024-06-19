@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<title style="color: darkblue; text-align: center">Image Management</title>
+<script>
+    async function deleteImage(event) {
+        event.preventDefault();
+
+        const deleteHash = document.getElementById("deleteHash").value;
+        const url = `/images/delete?deleteHash=${encodeURIComponent(deleteHash)}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE'
+            });
+
+            const data = await response.text();
+            alert('Response: ' + data);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the image.');
+        }
+    }
+</script>
+<body>
+<h2 style="color: darkblue; text-align: center">Choose a file</h2>
+<form method="post" enctype="multipart/form-data" action="/images/uploadImage">
+    <input type="file" name="imageFile"/>
+    <input type="submit" value="upload"/>
+</form>
+<h2 style="color: darkblue; text-align: center">Enter a delete hash</h2>
+<form id="deleteForm" onsubmit="deleteImage(event)">
+    <label for="deleteHash">Delete Hash:</label>
+    <input type="text" id="deleteHash" name="deleteHash" required>
+    <button type="submit">Delete</button>
+</form>
+</body>
+</html>
